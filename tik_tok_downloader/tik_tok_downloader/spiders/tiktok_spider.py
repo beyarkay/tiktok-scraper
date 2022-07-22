@@ -2,16 +2,13 @@ import scrapy
 import datetime
 from scrapy.linkextractors import LinkExtractor
 from selenium import webdriver
+from selenium.webdriver import FirefoxOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from scrapy.selector import Selector
 from shutil import which
   
-SELENIUM_DRIVER_NAME = 'firefox'
-SELENIUM_DRIVER_EXECUTABLE_PATH = which('geckodriver')
-SELENIUM_DRIVER_ARGUMENTS=['-headless']
-
 
 class TikTokSpider(scrapy.Spider):
     name = "tiktok"
@@ -26,7 +23,10 @@ class TikTokSpider(scrapy.Spider):
     def __init__(self):
         scrapy.Spider.__init__(self)
         # using a firefox driver
-        self.driver = webdriver.Firefox()
+
+        opts = FirefoxOptions()
+        opts.add_argument("--headless")
+        self.driver = webdriver.Firefox(options=opts)
 
     def __del__(self):
         try:
