@@ -1,4 +1,4 @@
-# Scrapy settings for tik_tok_downloader project
+# Scrapy settings for tiktok_downloader project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,15 +7,15 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'tik_tok_downloader'
+BOT_NAME = 'tiktok_downloader'
 
-SPIDER_MODULES = ['tik_tok_downloader.spiders']
-NEWSPIDER_MODULE = 'tik_tok_downloader.spiders'
+SPIDER_MODULES = ['tiktok_downloader.spiders']
+NEWSPIDER_MODULE = 'tiktok_downloader.spiders'
 
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'tik_tok_downloader (+http://www.yourdomain.com)'
+#USER_AGENT = 'tiktok_downloader (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -46,7 +46,7 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'tik_tok_downloader.middlewares.SeleniumSpiderMiddleware': 543,
+#    'tiktok_downloader.middlewares.SeleniumSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
@@ -64,8 +64,8 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'tik_tok_downloader.pipelines.CookTikTokPipeline': 200,
-    'tik_tok_downloader.pipelines.JsonlinesWriterPipeline': 300,
+    'tiktok_downloader.pipelines.CookTikTokPipeline': 200,
+    'tiktok_downloader.pipelines.JsonlinesWriterPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

@@ -1,5 +1,5 @@
 from itemadapter import ItemAdapter
-from tik_tok_downloader.items import TikTokItem
+from tiktok_downloader.items import TikTokItem
 import json
 
 class CookTikTokPipeline:
