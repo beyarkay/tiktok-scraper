@@ -1,4 +1,5 @@
 import scrapy
+import sys
 import datetime
 from scrapy.linkextractors import LinkExtractor
 from selenium import webdriver
@@ -26,8 +27,8 @@ class TikTokSpider(scrapy.Spider):
         opts = FirefoxOptions()
         opts.add_argument("--headless")
         self.driver = webdriver.Firefox(options=opts)
-        if not hasattr(self, 'min_elements'):
-            self.min_elements = 100
+        if not hasattr(self, 'min_tiktoks'):
+            self.min_tiktoks = 100
 
 
     def __del__(self):
@@ -38,25 +39,26 @@ class TikTokSpider(scrapy.Spider):
             print("no __del__ method exists in parent")
 
     def parse(self, response):
-        self.logger.info("This url has been identified - " + response.url)
+        self.logger.info("About to scrape from " + response.url)
         sel = Selector(response)
         self.driver.get(response.url)
         #wait for the iframe to load, beacuse the iframes are loaded via AJAX, after the initial page load
-        self.logger.info("Got URL, sleeping")
-        self.logger.info("Attempting to load TikToks")
 
         def scroll_and_check(driver):
             driver.execute_script('window.scrollTo(0,document.body.scrollHeight);')
             num_tiktoks = len(driver.find_elements(by=By.CSS_SELECTOR, value=self.CSS_TIKTOK))
             if num_tiktoks % 25 == 0:
-                self.logger.info(f"Scrapped {num_tiktoks}/{self.min_elements} ({num_tiktoks/self.min_elements * 100:.0f}%) tiktoks...")
-            return num_tiktoks > self.min_elements
+                self.logger.info(f"Scrapped {num_tiktoks}/{self.min_tiktoks} ({num_tiktoks/self.min_tiktoks * 100:.0f}%) tiptoes...")
+            return num_tiktoks > self.min_tiktoks
 
         try:
-            WebDriverWait(self.driver, 60).until(scroll_and_check)
+            timeout = 600
+            self.logger.info(f"Waiting until {self.min_tiktoks} tiktoks are loaded or {timeout}s passed")
+            WebDriverWait(self.driver, timeout).until(scroll_and_check)
         except Exception:
-            self.logger.info(f'Quitting driver, only {len(self.driver.find_elements(by=By.CSS_SELECTOR, value=self.CSS_TIKTOK))} tiktoks found')
+            self.logger.info(f'Quitting driver, only {len(self.driver.find_elements(by=By.CSS_SELECTOR, value=self.CSS_TIKTOK))} tiktoks found. error: {e}')
             self.driver.quit()
+            sys.exit(1)
 
         audios = [l.text for l in self.driver.find_elements(by=By.CSS_SELECTOR, value='.epjbyn0 a')]
         hearts = [l.text for l in self.driver.find_elements(by=By.CSS_SELECTOR, value='.e1hk3hf90:nth-child(1) .e1hk3hf92')]
