@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+export PATH=$PATH:/home/brk/.cargo/bin 
+cd /home/brk/projects/project1
+source .venv/bin/activate
+cd /home/brk/projects/project1/src
+scrapy crawl tik_tok
