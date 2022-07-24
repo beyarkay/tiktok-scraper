@@ -27,7 +27,7 @@ class TikTokSpider(scrapy.Spider):
         opts.add_argument("--headless")
         self.driver = webdriver.Firefox(options=opts)
         if not hasattr(self, 'min_elements'):
-            self.min_elements = 500
+            self.min_elements = 100
 
 
     def __del__(self):
@@ -47,7 +47,10 @@ class TikTokSpider(scrapy.Spider):
 
         def scroll_and_check(driver):
             driver.execute_script('window.scrollTo(0,document.body.scrollHeight);')
-            return len(driver.find_elements(by=By.CSS_SELECTOR, value=self.CSS_TIKTOK)) > self.min_elements
+            num_tiktoks = len(driver.find_elements(by=By.CSS_SELECTOR, value=self.CSS_TIKTOK))
+            if num_tiktoks % 25 == 0:
+                self.logger.info(f"Scrapped {num_tiktoks}/{self.min_elements} ({num_tiktoks/self.min_elements * 100:.0f}%) tiktoks...")
+            return num_tiktoks > self.min_elements
 
         try:
             WebDriverWait(self.driver, 60).until(scroll_and_check)
