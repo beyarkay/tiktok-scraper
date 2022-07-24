@@ -12,6 +12,7 @@ BOT_NAME = 'tiktok_downloader'
 SPIDER_MODULES = ['tiktok_downloader.spiders']
 NEWSPIDER_MODULE = 'tiktok_downloader.spiders'
 
+LOG_LEVEL = 'INFO'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
