@@ -20,13 +20,15 @@ class TikTokSpider(scrapy.Spider):
     CSS_SHARES = ".e1hk3hf90:nth-child(3) .e1hk3hf92"
     CSS_USERS =  ".emt6k1z0"
 
+
     def __init__(self):
         scrapy.Spider.__init__(self)
-        # using a firefox driver
-
         opts = FirefoxOptions()
         opts.add_argument("--headless")
         self.driver = webdriver.Firefox(options=opts)
+        if not hasattr(self, 'min_elements'):
+            self.min_elements = 500
+
 
     def __del__(self):
         try:
@@ -41,12 +43,11 @@ class TikTokSpider(scrapy.Spider):
         self.driver.get(response.url)
         #wait for the iframe to load, beacuse the iframes are loaded via AJAX, after the initial page load
         self.logger.info("Got URL, sleeping")
-        min_elements = 50
         self.logger.info("Attempting to load TikToks")
 
         def scroll_and_check(driver):
             driver.execute_script('window.scrollTo(0,document.body.scrollHeight);')
-            return len(driver.find_elements(by=By.CSS_SELECTOR, value=self.CSS_TIKTOK)) > min_elements
+            return len(driver.find_elements(by=By.CSS_SELECTOR, value=self.CSS_TIKTOK)) > self.min_elements
 
         try:
             WebDriverWait(self.driver, 60).until(scroll_and_check)
