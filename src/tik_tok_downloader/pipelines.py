@@ -23,7 +23,7 @@ class CookTikTokPipeline:
 
 class JsonlinesWriterPipeline:
     def open_spider(self, spider):
-        self.file = open('../data/tiktoks.jsonlines', 'w')
+        self.file = open('../data/tiktoks.jsonlines', 'a')
 
     def close_spider(self, spider):
         self.file.close()
