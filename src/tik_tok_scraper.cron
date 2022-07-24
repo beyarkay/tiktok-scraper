@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
+# Install this cron job like:
+# ```
+# # m h  dom mon dow   command
+# */15 * * * * /home/brk/cronjobs/tik_tok_scraper.cron >> /home/brk/cronjobs/tik_tok_scraper.log 2>&1
+# ```
 export PATH=$PATH:/home/brk/.cargo/bin 
 cd /home/brk/projects/project1
 source .venv/bin/activate
 cd /home/brk/projects/project1/src
-scrapy crawl tik_tok
+scrapy crawl tiktok >> /home/brk/cronjobs/tik_tok_scraper.log 2>&1
