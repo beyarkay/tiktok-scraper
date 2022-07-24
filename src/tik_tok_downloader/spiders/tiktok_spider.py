@@ -41,7 +41,7 @@ class TikTokSpider(scrapy.Spider):
         self.driver.get(response.url)
         #wait for the iframe to load, beacuse the iframes are loaded via AJAX, after the initial page load
         self.logger.info("Got URL, sleeping")
-        min_elements = 500
+        min_elements = 50
         self.logger.info("Attempting to load TikToks")
 
         def scroll_and_check(driver):
@@ -54,27 +54,18 @@ class TikTokSpider(scrapy.Spider):
             self.logger.info(f'Quitting driver, only {len(self.driver.find_elements(by=By.CSS_SELECTOR, value=self.CSS_TIKTOK))} tiktoks found')
             self.driver.quit()
 
-
         audios = [l.text for l in self.driver.find_elements(by=By.CSS_SELECTOR, value='.epjbyn0 a')]
         hearts = [l.text for l in self.driver.find_elements(by=By.CSS_SELECTOR, value='.e1hk3hf90:nth-child(1) .e1hk3hf92')]
         commts = [l.text for l in self.driver.find_elements(by=By.CSS_SELECTOR, value='.e1hk3hf90:nth-child(2) .e1hk3hf92')]
         shares = [l.text for l in self.driver.find_elements(by=By.CSS_SELECTOR, value='.e1hk3hf90:nth-child(3) .e1hk3hf92')]
         users =  [l.text for l in self.driver.find_elements(by=By.CSS_SELECTOR, value='.emt6k1z0')]
 
-        def parse_formatted_numeric(n: str) -> int:
-            if n[-1] == "M":
-                return int(float(n[:-1]) * 1_000_000)
-            elif n[-1] == "K":
-                return int(float(n[:-1]) * 1_000)
-            else:
-                return int(n)
-
         for a, h, c, s, u in zip(audios, hearts, commts, shares, users):
             yield {
                 'scraped_at': datetime.datetime.now(),
                 'audio': a,
-                'hearts': parse_formatted_numeric(h),
-                'commts': parse_formatted_numeric(c),
-                'shares': parse_formatted_numeric(s),
-                'user': f'https://www.tiktok.com/@{u}',
+                'hearts': h,
+                'commts': c,
+                'shares': s,
+                'user': u,
             }

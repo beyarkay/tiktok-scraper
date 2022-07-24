@@ -1,12 +1,21 @@
-# Define here the models for your scraped items
-#
-# See documentation in:
-# https://docs.scrapy.org/en/latest/topics/items.html
+from scrapy.item import Item, Field
 
-import scrapy
+class RawTikTokItem(Item):
+    """A single TikTok before the data has been processed.
+    All fields are simple strings, and may or may not be valid"""
+    scraped_at = Field()
+    audio_name = Field()
+    hearts = Field()
+    comments = Field()
+    shares = Field()
+    user = Field()
 
-
-class TutorialItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class TikTokItem(Item):
+    """A single TikTok with all fields verified and processed into appropriate
+    datatypes."""
+    scraped_at = Field()
+    audio_name = Field()
+    hearts = Field()
+    comments = Field()
+    shares = Field()
+    user = Field()

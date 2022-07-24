@@ -63,9 +63,10 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'tik_tok_downloader.pipelines.TutorialPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'tik_tok_downloader.pipelines.CookTikTokPipeline': 200,
+    'tik_tok_downloader.pipelines.JsonlinesWriterPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

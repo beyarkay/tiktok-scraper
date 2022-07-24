@@ -1,13 +1,36 @@
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-
-
-# useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
+from tik_tok_downloader.items import TikTokItem
+import json
 
+class CookTikTokPipeline:
+    def parse_formatted_numeric(self, n: str) -> int:
+        if n[-1] == "M":
+            return int(float(n[:-1]) * 1_000_000)
+        elif n[-1] == "K":
+            return int(float(n[:-1]) * 1_000)
+        else:
+            return int(n)
 
-class TutorialPipeline:
     def process_item(self, item, spider):
-        return item
+        return TikTokItem(
+            scraped_at=item.get('scraped_at', 'NaT').strftime("%Y-%m-%dT%H:%M:%S"),
+            audio_name=item.get('audio', 'unknown'),
+            hearts=self.parse_formatted_numeric(item.get('hearts', '0')),
+            comments=self.parse_formatted_numeric(item.get('commts', '0')),
+            shares=self.parse_formatted_numeric(item.get('shares', '0')),
+            user='https://www.tiktok.com/@' + item.get('user', 'unknown'),
+        )
+
+class JsonlinesWriterPipeline:
+    def open_spider(self, spider):
+        self.file = open('../data/tiktoks.jsonlines', 'w')
+
+    def close_spider(self, spider):
+        self.file.close()
+
+    def process_item(self, tiktok, spider):
+        line = json.dumps(ItemAdapter(tiktok).asdict()) + "\n"
+        print(line)
+        self.file.write(line)
+        return tiktok
+
