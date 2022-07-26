@@ -28,7 +28,7 @@ class TikTokSpider(scrapy.Spider):
         opts.add_argument("--headless")
         self.driver = webdriver.Firefox(options=opts)
         if not hasattr(self, 'min_tiktoks'):
-            self.min_tiktoks = 100
+            self.min_tiktoks = 30
 
 
     def __del__(self):
@@ -52,10 +52,10 @@ class TikTokSpider(scrapy.Spider):
             return num_tiktoks > self.min_tiktoks
 
         try:
-            timeout = 600
+            timeout = int(0.5 * self.min_tiktoks)
             self.logger.info(f"Waiting until {self.min_tiktoks} tiktoks are loaded or {timeout}s passed")
-            WebDriverWait(self.driver, timeout).until(scroll_and_check)
-        except Exception:
+            WebDriverWait(self.driver, timeout, 2).until(scroll_and_check)
+        except Exception as e:
             self.logger.info(f'Quitting driver, only {len(self.driver.find_elements(by=By.CSS_SELECTOR, value=self.CSS_TIKTOK))} tiktoks found. error: {e}')
             self.driver.quit()
             sys.exit(1)
