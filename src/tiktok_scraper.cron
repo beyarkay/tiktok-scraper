@@ -2,7 +2,7 @@
 # Install this cron job like:
 # ```
 # # m h  dom mon dow   command
-# */15 * * * * /home/brk/cronjobs/tiktok_scraper.cron >> /home/brk/cronjobs/tiktok_scraper.log 2>&1
+# */30 * * * * /home/brk/cronjobs/tiktok_scraper.cron >> /home/brk/cronjobs/tiktok_scraper.log 2>&1
 # ```
 export PATH=$PATH:/home/brk/.cargo/bin 
 cd /home/brk/projects/project1
