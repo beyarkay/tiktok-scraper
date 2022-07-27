@@ -20,8 +20,8 @@ class CookTikTokPipeline:
             likes=self.parse_formatted_numeric(item.get('likes', '0')),
             comments=self.parse_formatted_numeric(item.get('comments', '0')),
             username='https://www.tiktok.com/@' + item.get('username', '<no_username>'),
-            user_followers = item.get('user_followers', '<no data>'),
-            user_likes = item.get('user_likes', '<no data>'),
+            user_followers = self.parse_formatted_numeric(item.get('user_followers', '<no data>')),
+            user_likes = self.parse_formatted_numeric(item.get('user_likes', '<no data>')),
         )
 
 class JsonlinesWriterPipeline:

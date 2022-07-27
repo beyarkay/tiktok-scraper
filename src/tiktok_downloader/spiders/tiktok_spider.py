@@ -1,5 +1,6 @@
 import scrapy
 from time import sleep
+from time import time
 import sys
 import datetime
 from scrapy.linkextractors import LinkExtractor
@@ -27,7 +28,7 @@ class TikTokSpider(scrapy.Spider):
         if self.is_headless:
             opts.add_argument("--headless")
         self.driver = webdriver.Firefox(options=opts)
-        self.min_tiktoks = 500
+        self.min_tiktoks = 100
 
 
     def __del__(self):
@@ -41,14 +42,15 @@ class TikTokSpider(scrapy.Spider):
         sel = Selector(response)
         self.logger.info(f"Getting URL {response.url}")
         self.driver.get(response.url)
-        self.logger.debug("Loaded, finding first video and clicking")
+        self.logger.info("Loaded, finding first video and clicking")
         self.driver.find_element(by=By.CSS_SELECTOR, value=self.CSS_VIDEO).click()
         sleep(1)
 
         num_tiktoks = 0
         while num_tiktoks < self.min_tiktoks:
-            self.logger.debug("Finding video...")
+            self.logger.info("Finding video...")
             try:
+                start = time()
                 WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, '.e1mecfx00')))
                 curr_vid = self.driver.find_element(by=By.CSS_SELECTOR, value='.e1mecfx00')
 
@@ -61,11 +63,11 @@ class TikTokSpider(scrapy.Spider):
                 username = curr_vid.find_element(by=By.CSS_SELECTOR, value='.evv7pft1')
                 ActionChains(self.driver).move_to_element(username).perform()
 
-                self.logger.debug(f"Waiting for user profile preview to be visible...")
+                self.logger.info(f"Waiting for user profile preview to be visible...")
                 WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, self.CSS_USER_PROFILE)))
                 WebDriverWait(self.driver, 20).until(lambda d: '--' not in d.find_element(by=By.CSS_SELECTOR, value='.er095117').text)
                 user_followers, user_likes = self.driver.find_element(by=By.CSS_SELECTOR, value='.er095117').text.replace("Likes", "").split("Followers")
-                self.logger.debug(f"{audio.text=} {likes=} {username.text=} {comments=} {user_followers=} {user_likes=}")
+                self.logger.info(f"{audio.text=} {likes=} {username.text=} {comments=} {user_followers=} {user_likes=}")
 
                 yield {
                     'scraped_at': datetime.datetime.now(),
@@ -82,7 +84,7 @@ class TikTokSpider(scrapy.Spider):
             except Exception as e:
                 self.logger.exception(e)
 
-            self.logger.debug(f"Pressing down arrow")
+            self.logger.info(f"Pressing down arrow")
             old_url = self.driver.current_url
             body = self.driver.find_element(by=By.CSS_SELECTOR, value='body')
             limit = 20
@@ -96,7 +98,7 @@ class TikTokSpider(scrapy.Spider):
                 if limit == 0:
                     self.logger.info(f"Failed to go to the next tiktok, exiting with {num_tiktoks} tiktoks")
                     self.driver.get(response.url)
-                    self.logger.debug("Loaded, finding first video and clicking")
+                    self.logger.info("Loaded, finding first video and clicking")
                     self.driver.find_element(by=By.CSS_SELECTOR, value=self.CSS_VIDEO).click()
                     sleep(1)
-            self.logger.info(f"Scraped {num_tiktoks}/{self.min_tiktoks} ({num_tiktoks/self.min_tiktoks * 100:.0f}%) tiktoks...")
+            self.logger.info(f"Scraped {num_tiktoks}/{self.min_tiktoks} ({num_tiktoks/self.min_tiktoks * 100:.0f}%) tiktoks (took {time() - start}s)\n")
