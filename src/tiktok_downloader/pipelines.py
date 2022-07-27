@@ -14,11 +14,14 @@ class CookTikTokPipeline:
     def process_item(self, item, spider):
         return TikTokItem(
             scraped_at=item.get('scraped_at', 'NaT').strftime("%Y-%m-%dT%H:%M:%S"),
-            audio_name=item.get('audio', 'unknown'),
-            hearts=self.parse_formatted_numeric(item.get('hearts', '0')),
-            comments=self.parse_formatted_numeric(item.get('commts', '0')),
-            shares=self.parse_formatted_numeric(item.get('shares', '0')),
-            user='https://www.tiktok.com/@' + item.get('user', 'unknown'),
+            url=item.get('url', 'NaT'),
+            audio=item.get('audio', '<no audio>'),
+            audio_url=item.get('audio_url', '<no audio>'),
+            likes=self.parse_formatted_numeric(item.get('likes', '0')),
+            comments=self.parse_formatted_numeric(item.get('comments', '0')),
+            username='https://www.tiktok.com/@' + item.get('username', '<no_username>'),
+            user_followers = item.get('user_followers', '<no data>'),
+            user_likes = item.get('user_likes', '<no data>'),
         )
 
 class JsonlinesWriterPipeline:
@@ -30,7 +33,6 @@ class JsonlinesWriterPipeline:
 
     def process_item(self, tiktok, spider):
         line = json.dumps(ItemAdapter(tiktok).asdict()) + "\n"
-        print(line)
         self.file.write(line)
         return tiktok
 
