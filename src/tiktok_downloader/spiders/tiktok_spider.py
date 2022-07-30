@@ -86,17 +86,19 @@ class TikTokSpider(scrapy.Spider):
 
             self.logger.info(f"Pressing down arrow")
             old_url = self.driver.current_url
+            self.logger.info(f"  Found body")
             body = self.driver.find_element(by=By.CSS_SELECTOR, value='body')
             limit = 20
             while old_url == self.driver.current_url:
+                self.logger.info(f"  Sending down arrow, attempt {21 - limit}")
                 body.send_keys(Keys.ARROW_DOWN)
+                self.logger.info(f"  Sleeping")
                 sleep(1)
                 limit -= 1
-                self.logger.info(f"Can't find down arrow, attempt {21 - limit}")
                 # If we can't find more tiktoks for some reason, just exit and
                 # use what we've got
                 if limit == 0:
-                    self.logger.info(f"Failed to go to the next tiktok, exiting with {num_tiktoks} tiktoks")
+                    self.logger.info(f"Failed to go to the next tiktok, restarting with {num_tiktoks} tiktoks")
                     self.driver.get(response.url)
                     self.logger.info("Loaded, finding first video and clicking")
                     self.driver.find_element(by=By.CSS_SELECTOR, value=self.CSS_VIDEO).click()
