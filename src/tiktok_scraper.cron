@@ -4,6 +4,7 @@
 # # m h  dom mon dow   command
 # */30 * * * * /home/brk/cronjobs/tiktok_scraper.cron >> /home/brk/cronjobs/tiktok_scraper.log 2>&1
 # ```
+pgrep firefox-esr | xargs kill -9
 export PATH=$PATH:/home/brk/.cargo/bin 
 cd /home/brk/projects/project1
 source .venv/bin/activate
