@@ -1,3 +1,4 @@
 **/*.log
-*/*.csv
-*/*.jsonlines
+**/*.csv
+**/*.jsonlines
+**/*.pdf
