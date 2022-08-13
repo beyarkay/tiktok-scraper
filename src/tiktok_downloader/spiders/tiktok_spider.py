@@ -103,4 +103,4 @@ class TikTokSpider(scrapy.Spider):
                     self.logger.info("Loaded, finding first video and clicking")
                     self.driver.find_element(by=By.CSS_SELECTOR, value=self.CSS_VIDEO).click()
                     sleep(1)
-            self.logger.info(f"Scraped {num_tiktoks}/{self.min_tiktoks} ({num_tiktoks/self.min_tiktoks * 100:.0f}%) tiktoks (took {time() - start}s)\n")
+            self.logger.info(f"Scraped {num_tiktoks}/{self.min_tiktoks} ({num_tiktoks/self.min_tiktoks * 100:.0f}%) tiktoks (took {round(time() - start, 2)}s)\n")
