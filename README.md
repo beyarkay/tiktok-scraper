@@ -72,16 +72,15 @@ ln -s src/tiktok_scraper.cron ~/cronjobs/tiktok_scraper.cron
 
 ```                                
 ├── README.md                  This file
+├── requirements.txt           Python requirements
+├── project1-spec.md           
 ├── data                     
 │   └── tiktoks.jsonlines      all the tiktoks    
-├── project1-spec.md           
 ├── report                     
-│   ├── build_report.sh        compile markdown to LaTeX
-formatted pdf
+│   ├── build_report.sh        compile markdown to LaTeX formatted pdf
 │   ├── cite.bib               Citations for the report
 │   ├── img/                   Graphs for the report
 │   ├── report.md              The pandoc formatted report
-├── requirements.txt           Python requirements
 └── src                     
     ├── analyse_data.ipynb     Notebook for making the graphs
     ├── scrapy.cfg             Scrapy configuration
