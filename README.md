@@ -70,31 +70,27 @@ ln -s src/tiktok_scraper.cron ~/cronjobs/tiktok_scraper.cron
 
 ## Directory structure
 
-```
-├── README.md
-├── data
-│   └── tiktoks.jsonlines
-├── project1-spec.md
-├── report
-│   ├── build_report.sh
-│   ├── cite.bib
-│   ├── img
-│   │   ├── bellapoarch.png
-│   │   ├── khaby.lame.png
-│   │   ├── tiktok.png
-│   ├── report.md
-├── requirements.txt
-└── src
-    ├── analyse_data.ipynb
-    ├── geckodriver.log
-    ├── scrapy.cfg
-    ├── tiktok_downloader
-    │   ├── __init__.py
-    │   ├── __pycache__
-    │   ├── items.py
-    │   ├── middlewares.py
-    │   ├── pipelines.py
-    │   ├── settings.py
-    │   └── spiders
-    └── tiktok_scraper.cron
-``
+```                                
+├── README.md                  This file
+├── data                     
+│   └── tiktoks.jsonlines      all the tiktoks    
+├── project1-spec.md           
+├── report                     
+│   ├── build_report.sh        compile markdown to LaTeX
+formatted pdf
+│   ├── cite.bib               Citations for the report
+│   ├── img/                   Graphs for the report
+│   ├── report.md              The pandoc formatted report
+├── requirements.txt           Python requirements
+└── src                     
+    ├── analyse_data.ipynb     Notebook for making the graphs
+    ├── scrapy.cfg             Scrapy configuration
+    ├── tiktok_downloader/      
+    │   ├── __init__.py        
+    │   ├── items.py           Scrapy descriptions of TikToks
+    │   ├── middlewares.py     Scrapy middlewares
+    │   ├── pipelines.py       Scrapy pipelines
+    │   ├── settings.py        Scrapy settings
+    │   └── spiders/           Directory containing the scraper
+    └── tiktok_scraper.cron    Script to be run by cron
+```                                
